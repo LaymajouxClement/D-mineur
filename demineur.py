@@ -31,11 +31,17 @@ six =pygame.image.load(r"image_nombre\six.jpg").convert_alpha()
 sept =pygame.image.load(r"image_nombre\sept.jpg").convert_alpha()
 huit =pygame.image.load(r"image_nombre\huit.jpg").convert_alpha()
 perdu = pygame.image.load(r"perdu.png").convert()
+noir = pygame.image.load(r'noir.png').convert()
+gagné = pygame.image.load(r'gagne.png')
 
+liste_drapeau =[]
 
 for y in range(0,64):
     coordonnee_mine = a[y]
     window.blit(vide,coordonnee_mine)
+
+for z in range (0,64):
+    liste_drapeau.append(1)
 
 for x in range (0,64):
     recup = liste[x] # 0 ou 1
@@ -773,7 +779,7 @@ pygame.display.flip()
 print(len(liste_image))
 continu = True
 '''try:'''
-
+gagner = False
 while continu == True:
 
     for event in pygame.event.get():
@@ -791,7 +797,39 @@ while continu == True:
             if event.button == 3:
 
                 mouse_x_y = pygame.mouse.get_pos()
-                print(mouse_x_y,"clic droit")
+                liste_x_y =[]
+                position_x = int((mouse_x_y[0])/80)
+                position_y = int((mouse_x_y[1])/80)
+                liste_x_y.append([(position_x*80)+2,(position_y*80)+2])
+                liste_x_y_mouse =liste_x_y[0]
+                liste_x =liste_x_y_mouse[0]
+                liste_y = liste_x_y_mouse[1]
+                liste_regroup =(liste_x,liste_y)
+                print(liste_x_y_mouse,liste_regroup)
+
+                for x in range (0,64):
+                    if liste_regroup == a[x]:
+                        if liste_drapeau[x]==1:
+                            liste_drapeau[x]=0
+                            window.blit(drapeau,a[x])
+                        else:
+                            liste_drapeau[x]=1
+                            window.blit(noir,a[x])
+
+                if liste_drapeau.count(0)==10:
+
+                    for x in range (0,64):
+                        print(liste_drapeau[x],liste[x])
+                        if liste_drapeau[x] != liste[x]:
+                            window.blit(perdu,(0,0))
+                            gagner = False
+                    if liste_drapeau == liste:
+                        gagner = True
+
+                    if gagner == True:
+                        window.blit(gagné,(0,0))
+
+
 
             elif event.button == 1:
 
